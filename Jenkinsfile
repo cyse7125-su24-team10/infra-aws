@@ -9,8 +9,8 @@ pipeline {
         stage('Terraform Validate') {
             steps {
                 script {
-                    sh "Terraform init"
-                    sh "Terraform validate"
+                    sh "terraform init"
+                    sh "terraform validate"
                 }
             }
         }
