@@ -10,6 +10,7 @@ resource "aws_vpc" "eks_vpc" {
 resource "aws_subnet" "eks_public_subnet1" {
   vpc_id            = aws_vpc.eks_vpc.id
   cidr_block         = var.eks_public_subnet1_cidr_block
+  map_public_ip_on_launch = true
   availability_zone = var.eks_public_subnet1_availability_zone
   tags = {
     Name = var.eks_public_subnet_tag
@@ -20,6 +21,7 @@ resource "aws_subnet" "eks_public_subnet1" {
 resource "aws_subnet" "eks_public_subnet2" {
   vpc_id            = aws_vpc.eks_vpc.id
   cidr_block         = var.eks_public_subnet2_cidr_block
+  map_public_ip_on_launch = true
   availability_zone = var.eks_public_subnet2_availability_zone
   tags = {
     Name = var.eks_public_subnet_tag
@@ -30,6 +32,7 @@ resource "aws_subnet" "eks_public_subnet2" {
 resource "aws_subnet" "eks_public_subnet3" {
   vpc_id            = aws_vpc.eks_vpc.id
   cidr_block         = var.eks_public_subnet3_cidr_block
+  map_public_ip_on_launch = true
   availability_zone = var.eks_public_subnet3_availability_zone
   tags = {
     Name = var.eks_public_subnet_tag
