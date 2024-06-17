@@ -56,6 +56,9 @@ module "eks" {
 
       instance_types = ["c3.large"]
       capacity_type  = "ON_DEMAND"
+      # launch_template_id = "lt-0"
+      use_custom_launch_template = false
+      create_launch_template = false
 
       # update_config = {
       #   max_unavailable = 1
