@@ -1,8 +1,3 @@
-data "aws_caller_identity" "current" {}
-
-output "account_id" {
-  value = data.aws_caller_identity.current.account_id
-}
 
 # EKS Cluster IAM Role
 resource "aws_iam_role" "eks_cluster" {
