@@ -8,6 +8,7 @@ module "eks" {
   cluster_endpoint_public_access  = true
   cluster_endpoint_private_access = true 
   create_cloudwatch_log_group = false
+  depends_on = [ aws_iam_role.eks_cluster, aws_iam_role.eks_node_group ]
 
   create_kms_key = false
   cluster_encryption_config = {
@@ -25,6 +26,8 @@ module "eks" {
   subnet_ids               = [aws_subnet.eks_public_subnet1.id,aws_subnet.eks_public_subnet2.id, aws_subnet.eks_public_subnet3.id] #public subnets for now 
   control_plane_subnet_ids = [aws_subnet.eks_private_subnet1.id, aws_subnet.eks_private_subnet2.id, aws_subnet.eks_private_subnet3.id] #private subnets 
 
+  create_iam_role = false
+  iam_role_arn = aws_iam_role.eks_cluster.arn
 
   cluster_addons = {
     coredns = {
@@ -76,23 +79,22 @@ module "eks" {
   # To add the current caller identity as an administrator
   enable_cluster_creator_admin_permissions = true
 
-  # access_entries = {
-  #   # One access entry with a policy associated
-  #   example = {
-  #     kubernetes_groups = []
-  #     principal_arn     = "arn:aws:iam::654654499596:user/vinay-console"
+  access_entries = {
+    # One access entry with a policy associated
+    root = {
+      kubernetes_groups = []
+      principal_arn     = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"
 
-  #     policy_associations = {
-  #       example = {
-  #         policy_arn = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSViewPolicy"
-  #         access_scope = {
-  #           namespaces = ["default"]
-  #           type       = "namespace"
-  #         }
-  #       }
-  #     }
-  #   }
-  # }
+      policy_associations = {
+        example = {
+          policy_arn = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSClusterAdminPolicy"
+          access_scope = {
+            type       = "cluster"
+          }
+        }
+      }
+    }
+  }
 
   tags = {
     Environment = "dev"
