@@ -63,9 +63,9 @@ module "eks" {
       use_custom_launch_template = false
       create_launch_template = false
 
-      # update_config = {
-      #   max_unavailable = 1
-      # }
+      update_config = {
+        max_unavailable = 1
+      }
 
       create_iam_role = false
       iam_role_arn    = aws_iam_role.eks_node_group.arn
