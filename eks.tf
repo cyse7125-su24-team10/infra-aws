@@ -2,8 +2,8 @@ module "eks" {
   source  = "terraform-aws-modules/eks/aws"
   version = "~> 20.0"
 
-  cluster_name    = "csye7125"
-  cluster_version = "1.29"
+  cluster_name    = var.eks_cluster_name
+  cluster_version = var.eks_cluster_version
 
   cluster_endpoint_public_access  = true
   cluster_endpoint_private_access = true 
@@ -13,14 +13,14 @@ module "eks" {
   create_kms_key = false
   cluster_encryption_config = {
     provider_key_arn = aws_kms_key.eks_secrets.arn
-    resources        = ["secrets"]
+    resources        = var.cluster_encryption_config_resources
   }
 
   enable_irsa = true
-  authentication_mode = "API_AND_CONFIG_MAP"
+  authentication_mode = var.eks_cluster_authentication_mode
 
 
-  cluster_enabled_log_types = ["api", "audit", "authenticator", "controllerManager", "scheduler"]
+  cluster_enabled_log_types = var.cluster_enabled_log_types
 
   vpc_id                   = aws_vpc.eks_vpc.id
   subnet_ids               = [aws_subnet.eks_public_subnet1.id,aws_subnet.eks_public_subnet2.id, aws_subnet.eks_public_subnet3.id] #public subnets for now 
@@ -53,28 +53,28 @@ module "eks" {
 
   eks_managed_node_groups = {
     vk = {
-      ami_type =  "AL2_x86_64"  
-      min_size     = 1
-      max_size     = 2
-      desired_size = 1
+      ami_type =  var.ami_type 
+      min_size     = var.min_size
+      max_size     = var.max_size
+      desired_size = var.desired_size
 
-      instance_types = ["c3.large"]
-      capacity_type  = "ON_DEMAND"
+      instance_types = var.instance_types
+      capacity_type  = var.capacity_type
       # launch_template_id = "lt-0"
        use_custom_launch_template = true
        create_launch_template = true
 
       update_config = {
-        max_unavailable = 1
+        max_unavailable = var.max_unavailable
       }
       block_device_mappings = [
         {
-          device_name = "/dev/xvda"
+          device_name = var.device_name
           ebs = {
             encrypted   = true
-            volume_size = 20
+            volume_size = var.ebs_volume_size
             kms_key_id  = aws_kms_key.ebs.arn
-            volume_type = "gp2"
+            volume_type = var.ebs_volume_type
           }
         }
       ]
@@ -108,7 +108,7 @@ module "eks" {
   }
 
   tags = {
-    Environment = "dev"
+    Environment = var.environment_tag
     Terraform   = "true"
   }
 }
