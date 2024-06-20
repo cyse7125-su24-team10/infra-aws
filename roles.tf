@@ -83,3 +83,30 @@ resource "aws_iam_role_policy_attachment" "eks_container_registry_policy" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
   role       = aws_iam_role.eks_node_group.name
 }
+
+resource "aws_iam_policy_attachment" "node_group_policy" {
+  name       = "eks-cluster-node-policy-kms-attachment"
+  roles      = [aws_iam_role.eks_node_group.name]
+  policy_arn = aws_iam_policy.inline_policy_ebs.arn
+}
+
+resource "aws_iam_policy" "inline_policy_ebs" {
+  name = "eks-cluster-node-policy-kms"
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action = [
+          "kms:Encrypt",
+          "kms:Decrypt",
+          "kms:ListGrants",
+          "kms:DescribeKey",
+          "kms:CreateGrant",
+          "kms:RevokeGrant",
+        ]
+        Effect   = "Allow"
+        Resource = "${aws_kms_key.ebs.arn}"
+      }
+    ]
+  })
+}
