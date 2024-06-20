@@ -1,15 +1,15 @@
 # KMS Keys
 resource "aws_kms_key" "eks_secrets" {
-  description             = "KMS key for EKS secrets encryption"
-  deletion_window_in_days = 7
+  description             = var.eks_secrets_key_description
+  deletion_window_in_days = var.deletion_window_in_days
   enable_key_rotation     = true
 }
 
 resource "aws_kms_key" "ebs" {
-  description             = "KMS key for EBS encryption"
-  deletion_window_in_days = 7
-  key_usage                = "ENCRYPT_DECRYPT"
-  customer_master_key_spec = "SYMMETRIC_DEFAULT"
+  description             = var.ebs_key_description
+  deletion_window_in_days = var.deletion_window_in_days
+  key_usage                = var.ebs_key_usage
+  customer_master_key_spec = var.customer_master_key_spec
   enable_key_rotation     = true
   policy = jsonencode({
     "Version": "2012-10-17",
