@@ -26,6 +26,7 @@ module "eks" {
   subnet_ids               = [aws_subnet.eks_public_subnet1.id,aws_subnet.eks_public_subnet2.id, aws_subnet.eks_public_subnet3.id] #public subnets for now 
   control_plane_subnet_ids = [aws_subnet.eks_private_subnet1.id, aws_subnet.eks_private_subnet2.id, aws_subnet.eks_private_subnet3.id] #private subnets 
 
+  #comment if issue with the role
   create_iam_role = false
   iam_role_arn = aws_iam_role.eks_cluster.arn
 
@@ -53,20 +54,30 @@ module "eks" {
   eks_managed_node_groups = {
     vk = {
       ami_type =  "AL2_x86_64"  
-      min_size     = 3
-      max_size     = 6
-      desired_size = 3
+      min_size     = 1
+      max_size     = 2
+      desired_size = 1
 
       instance_types = ["c3.large"]
       capacity_type  = "ON_DEMAND"
       # launch_template_id = "lt-0"
-      use_custom_launch_template = false
-      create_launch_template = false
+       use_custom_launch_template = true
+       create_launch_template = true
 
       update_config = {
         max_unavailable = 1
       }
-
+      block_device_mappings = [
+        {
+          device_name = "/dev/xvda"
+          ebs = {
+            encrypted   = true
+            volume_size = 20
+            kms_key_id  = aws_kms_key.ebs.arn
+            volume_type = "gp2"
+          }
+        }
+      ]
       create_iam_role = false
       iam_role_arn    = aws_iam_role.eks_node_group.arn
 
