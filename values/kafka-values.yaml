@@ -2095,13 +2095,13 @@ metrics:
 provisioning:
   ## @param provisioning.enabled Enable kafka provisioning Job
   ##
-  enabled: false
+  enabled: true
   ## @param provisioning.automountServiceAccountToken Mount Service Account token in pod
   ##
   automountServiceAccountToken: false
   ## @param provisioning.numPartitions Default number of partitions for topics when unspecified
   ##
-  numPartitions: 1
+  numPartitions: 3
   ## @param provisioning.replicationFactor Default replication factor for topics when unspecified
   ##
   replicationFactor: 1
@@ -2114,7 +2114,14 @@ provisioning:
   ##     max.message.bytes: 64000
   ##     flush.messages: 1
   ##
-  topics: []
+  topics:
+    - name: cve
+      partitions: 3
+      replicationFactor: 2
+      ## https://kafka.apache.org/documentation/#topicconfigs
+      config:
+        max.message.bytes: 64000
+        flush.messages: 1
   ## @param provisioning.nodeSelector Node labels for pod assignment
   ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
