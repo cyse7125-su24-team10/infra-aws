@@ -30,7 +30,7 @@ global:
     auth:
       postgresPassword: "git"
       username: "web_app"
-      password: "vin123"
+      password: "vin123" # "placeholder-password"
       database: "cve"
       existingSecret: ""
       secretKeys:

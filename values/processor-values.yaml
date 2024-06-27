@@ -37,25 +37,28 @@ readinessProbe:
   periodSeconds: 5
 
 env:
-  # - name: DB_HOST
-  #   value: postgresql # host.docker.internal for local postgres
-  # - name: DB_USER
-  #   value: web_app
-  # - name: DB_PASSWORD
-  #   valueFrom: 
-  #     secretKeyRef:
-  #       name: db-password-secret
-  #       key: DB_PASSWORD
-  # - name: DB
-  #   value: cve
-  # - name: DB_PORT
-  #   value: "5432"
-  # - name: DB_SCHEMA
-  #   value: cve
+  - name: DB_HOST
+    value: postgresql # host.docker.internal for local postgres
+  - name: DB_USER
+    value: web_app
+  - name: DB_PASSWORD
+    valueFrom: 
+      secretKeyRef:
+        name: db-password-secret
+        key: DB_PASSWORD
+  - name: DB
+    value: cve
+  - name: DB_PORT
+    value: "5432"
+  - name: DB_SCHEMA
+    value: cve
   - name: KAFKA_USER
     value: user1
   - name: KAFKA_PASSWORD
-    value: "lSeoHL5U6M"
+    valueFrom: 
+      secretKeyRef:
+        name: kafka-secret
+        key: KAFKA_PASSWORD
   - name: GOARCH
     value: amd64
   - name: KAFKA_BROKER_0
@@ -86,6 +89,19 @@ initContainer:
       value: "5432"    
     - name: DB_SCHEMA
       value: cve
+
+secrets:
+  dbPassword: dmluMTIz
+  dockerConfigJson: eyJhdXRocyI6IHsiaHR0cHM6Ly9pbmRleC5kb2NrZXIuaW8vdjEvIjogeyJ1c2VybmFtZSI6ICJ2a25ldTciLCAicGFzc3dvcmQiOiAiZGNrcl9wYXRfdkRjVk1JYzY4WkJhVEc0UGQxUUtEdWIwdXJVIiwgImVtYWlsIjogInZpbmF5MjEwMzE5OThAZ21haWwuY29tIiwgImF1dGgiOiAiZG10dVpYVTNPbVJqYTNKZmNHRjBYM1pFWTFaTlNXTTJPRnBDWVZSSE5GQmtNVkZMUkhWaU1IVnlWUT09In19fQ==
+  kafkaPassword: bFNlb0hMNVU2TQ== 
+# secrets: 
+#   dbPassword:  "placeholder_for_db_password"
+#   dockerConfigJson: "placeholder_for_docker_config_json"
+#   kafkaPassword: "placeholder_for_kafka_password"
+
+
+
+
 # serviceAccount:
 #   # Specifies whether a service account should be created
 #   create: true
