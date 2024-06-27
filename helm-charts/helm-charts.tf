@@ -9,6 +9,9 @@ resource "helm_release" "kafka_chart" {
     chart = "../charts/kafka"
     wait = false
     namespace = "kafka"
+    values = [
+        "${file("../values/kafka-values.yaml")}"
+    ]
 }
 
 resource "helm_release" "postgres_chart" {
@@ -16,6 +19,9 @@ resource "helm_release" "postgres_chart" {
     chart = "../charts/bitnami-postgres"
     wait = false
     namespace = "cve-consumer"
+    values = [
+        "${file("../values/postgres-values.yaml")}"
+    ]
 }
 
 # resource "helm_release" "cve_consumer_chart" {
@@ -30,5 +36,8 @@ resource "helm_release" "cve_processor_chart" {
     chart = "../charts/cve-processor"
     wait = false
     namespace = "cve-processor"
+    values = [
+        "${file("../values/processor-values.yaml")}"
+    ]
 }
 
