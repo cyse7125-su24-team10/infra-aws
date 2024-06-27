@@ -47,13 +47,13 @@ resource "helm_release" "postgres_chart" {
 #     namespace = "cve-consumer"
 # }
 
-resource "helm_release" "cve_processor_chart" {
-    name      = "cve-processor"
-    chart = "./charts/cve-processor"
-    wait = false
-    namespace = "cve-processor"
-    values = [
-        "${file("./values/processor-values.yaml")}"
-    ]
-    depends_on = [ module.eks, kubernetes_namespace.cve-processor]
-}
+# resource "helm_release" "cve_processor_chart" {
+#     name      = "cve-processor"
+#     chart = "./charts/cve-processor"
+#     wait = false
+#     namespace = "cve-processor"
+#     values = [
+#         "${file("./values/processor-values.yaml")}"
+#     ]
+#     depends_on = [ module.eks, kubernetes_namespace.cve-processor]
+# }
