@@ -18,6 +18,12 @@ resource "kubernetes_namespace" "cve-consumer" {
     }
 }
 
+resource "kubernetes_namespace" "eks-autoscaler" {
+    metadata {
+        name = "eks-autoscaler"
+    }
+}
+
 resource "helm_release" "kafka_chart" {
     name      = "kafka"
     chart = "./charts/kafka"
@@ -38,6 +44,37 @@ resource "helm_release" "postgres_chart" {
         "${file("./values/postgres-values.yaml")}"
     ]
     depends_on = [ module.eks, kubernetes_namespace.cve-consumer ]
+}
+
+resource "helm_release" "cluster_autoscaler" {
+    name = "cluster-autoscaler"
+    chart = "./charts/cluster-autoscaler"
+    namespace = "eks-autoscaler"
+    wait = false 
+    values = [
+        "${file("./values/autoscaler-values.yaml")}"
+    ]
+    set { 
+        name = "rbac.serviceAccount.name" 
+        value = "cluster-autoscaler-service-account"
+    }
+
+    set {
+    name  = "rbac.serviceAccount.annotations.eks\\.amazonaws\\.com/role-arn"
+    value = aws_iam_role.cluster_autoscaler.arn
+    }
+    set {
+        name  = "autoDiscovery.clusterName"
+        value = module.eks.cluster_name
+    }
+
+    set {
+    name  = "awsRegion"
+    value = var.provider_region
+  }
+   
+   depends_on = [ module.eks, kubernetes_namespace.eks-autoscaler ]
+
 }
 
 # resource "helm_release" "cve_consumer_chart" {
