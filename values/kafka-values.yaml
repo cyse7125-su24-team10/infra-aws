@@ -265,7 +265,7 @@ sasl:
   client:
     users:
       - user1
-    passwords: "placeholder-password"
+    passwords: "lSeoHL5U6M"
   ## Credentials for Zookeeper communications.
   ## @param sasl.zookeeper.user Username for zookeeper communications when SASL is enabled.
   ## @param sasl.zookeeper.password Password for zookeeper communications when SASL is enabled.
