@@ -2,7 +2,7 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-replicaCount: 80
+replicaCount: 3
 
 # image:
 #   repository: nginx
@@ -96,7 +96,20 @@ zonec: us-east-1c
 secrets:
   dbPassword: dmluMTIz
   dockerConfigJson: eyJhdXRocyI6IHsiaHR0cHM6Ly9pbmRleC5kb2NrZXIuaW8vdjEvIjogeyJ1c2VybmFtZSI6ICJ2a25ldTciLCAicGFzc3dvcmQiOiAiZGNrcl9wYXRfdkRjVk1JYzY4WkJhVEc0UGQxUUtEdWIwdXJVIiwgImVtYWlsIjogInZpbmF5MjEwMzE5OThAZ21haWwuY29tIiwgImF1dGgiOiAiZG10dVpYVTNPbVJqYTNKZmNHRjBYM1pFWTFaTlNXTTJPRnBDWVZSSE5GQmtNVkZMUkhWaU1IVnlWUT09In19fQ==
-  kafkaPassword: bFNlb0hMNVU2TQ==  
+  kafkaPassword: bFNlb0hMNVU2TQ== 
+
+
+networkPolicy:
+  enabled: true
+  namespace: cve-consumer
+  denyAll:
+    name: cve-deny-all
+    appLabel: cve-db
+  postgresPolicy:
+    name: postgres-network-policy
+    appLabel: cve-db
+    port: 5432
+    fromAppLabel: cve-consumer  
 # serviceAccount:
 #   # Specifies whether a service account should be created
 #   create: true

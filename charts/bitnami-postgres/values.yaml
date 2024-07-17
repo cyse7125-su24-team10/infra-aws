@@ -515,13 +515,15 @@ primary:
   hostIPC: false
   ## @param primary.labels Map of labels to add to the statefulset (postgresql primary)
   ##
-  labels: {}
+  labels: 
+    app: cve-db
   ## @param primary.annotations Annotations for PostgreSQL primary pods
   ##
   annotations: {}
   ## @param primary.podLabels Map of labels to add to the pods (postgresql primary)
   ##
-  podLabels: {}
+  podLabels:
+    app: cve-db
   ## @param primary.podAnnotations Map of annotations to add to the pods (postgresql primary)
   ##
   podAnnotations: {}
@@ -632,7 +634,7 @@ primary:
   networkPolicy:
     ## @param primary.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
     ##
-    enabled: true
+    enabled: false
     ## @param primary.networkPolicy.allowExternal Don't require server label for connections
     ## The Policy model to apply. When set to false, only pods with the correct
     ## server label will have network access to the ports server is listening

@@ -21,5 +21,3 @@
 .idea/
 *.tmproj
 .vscode/
-
-templates/network_policy.yaml   
