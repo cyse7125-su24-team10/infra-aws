@@ -93,11 +93,6 @@ zonec: us-east-1c
 #   dockerConfigJson: "placeholder_for_docker_config_json"
 #   kafkaPassword: "placeholder_for_kafka_password"
 
-secrets:
-  dbPassword: dmluMTIz
-  dockerConfigJson: eyJhdXRocyI6IHsiaHR0cHM6Ly9pbmRleC5kb2NrZXIuaW8vdjEvIjogeyJ1c2VybmFtZSI6ICJ2a25ldTciLCAicGFzc3dvcmQiOiAiZGNrcl9wYXRfdkRjVk1JYzY4WkJhVEc0UGQxUUtEdWIwdXJVIiwgImVtYWlsIjogInZpbmF5MjEwMzE5OThAZ21haWwuY29tIiwgImF1dGgiOiAiZG10dVpYVTNPbVJqYTNKZmNHRjBYM1pFWTFaTlNXTTJPRnBDWVZSSE5GQmtNVkZMUkhWaU1IVnlWUT09In19fQ==
-  kafkaPassword: bFNlb0hMNVU2TQ== 
-
 
 networkPolicy:
   enabled: true
