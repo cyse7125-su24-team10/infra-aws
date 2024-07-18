@@ -2095,7 +2095,7 @@ metrics:
 provisioning:
   ## @param provisioning.enabled Enable kafka provisioning Job
   ##
-  enabled: true
+  enabled: false
   ## @param provisioning.automountServiceAccountToken Mount Service Account token in pod
   ##
   automountServiceAccountToken: false
@@ -2117,7 +2117,7 @@ provisioning:
   topics:
     - name: cve
       partitions: 3
-      replicationFactor: 2
+      replicationFactor: 1
       ## https://kafka.apache.org/documentation/#topicconfigs
       config:
         max.message.bytes: 64000
