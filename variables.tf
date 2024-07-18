@@ -64,3 +64,9 @@ variable deletion_window_in_days {}
 variable ebs_key_description {}
 variable ebs_key_usage {}
 variable customer_master_key_spec {}
+variable "github_token" {
+  description = "GitHub token"
+}
+variable "autoscaler_version" {
+  
+}

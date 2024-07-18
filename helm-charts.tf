@@ -48,7 +48,7 @@ resource "helm_release" "postgres_chart" {
 
 resource "helm_release" "cluster_autoscaler" {
     name = "cluster-autoscaler"
-    chart = "./charts/cluster-autoscaler"
+    chart = "https://x-access-token:${var.github_token}@github.com/cyse7125-su24-team10/helm-eks-autoscaler/archive/refs/tags/v${var.autoscaler_version}.tar.gz"
     namespace = "eks-autoscaler"
     wait = false 
     values = [
