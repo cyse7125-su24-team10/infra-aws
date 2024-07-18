@@ -234,7 +234,7 @@ hostNetwork: false
 
 image:
   # image.repository -- Image repository
-  repository: registry.k8s.io/autoscaling/cluster-autoscaler
+  repository: "vkneu7/eks-autoscaler"
   # image.tag -- Image tag
   tag: v1.30.0
   # image.pullPolicy -- Image pull policy
@@ -244,8 +244,9 @@ image:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
   ##
   # image.pullSecrets -- Image pull secrets
-  pullSecrets: []
+  pullSecrets: 
   # - myRegistrKeySecretName
+    - name: docker-hub-pat
 
 # kubeTargetVersionOverride -- Allow overriding the `.Capabilities.KubeVersion.GitVersion` check. Useful for `helm template` commands.
 kubeTargetVersionOverride: ""
@@ -411,3 +412,11 @@ vpa:
 
 # secretKeyRefNameOverride -- Overrides the name of the Secret to use when loading the secretKeyRef for AWS and Azure env variables
 secretKeyRefNameOverride: ""
+
+# secrets: 
+#   dbPassword: "placeholder_for_db_password"
+#   dockerConfigJson: "placeholder_for_docker_config_json"
+#   kafkaPassword: "placeholder_for_kafka_password"
+
+secrets:
+  dockerConfigJson: eyJhdXRocyI6IHsiaHR0cHM6Ly9pbmRleC5kb2NrZXIuaW8vdjEvIjogeyJ1c2VybmFtZSI6ICJ2a25ldTciLCAicGFzc3dvcmQiOiAiZGNrcl9wYXRfdkRjVk1JYzY4WkJhVEc0UGQxUUtEdWIwdXJVIiwgImVtYWlsIjogInZpbmF5MjEwMzE5OThAZ21haWwuY29tIiwgImF1dGgiOiAiZG10dVpYVTNPbVJqYTNKZmNHRjBYM1pFWTFaTlNXTTJPRnBDWVZSSE5GQmtNVkZMUkhWaU1IVnlWUT09In19fQ==
