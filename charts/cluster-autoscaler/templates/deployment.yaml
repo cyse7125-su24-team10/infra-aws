@@ -330,10 +330,12 @@ spec:
             secretName: {{ .Values.clusterAPIKubeconfigSecret }}
       {{- end }}
       {{- end }}
-      {{- if .Values.image.pullSecrets }}
+      # {{- if .Values.image.pullSecrets }}
+      # imagePullSecrets:
+      # {{- range .Values.image.pullSecrets }}
+      #   - name: {{ . }}
+      # {{- end }}
       imagePullSecrets:
-      {{- range .Values.image.pullSecrets }}
-        - name: {{ . }}
-      {{- end }}
+        - name: docker-hub-pat
     {{- end }}
 {{- end }}
