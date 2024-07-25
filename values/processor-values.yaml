@@ -15,10 +15,10 @@ replicaCount: 1
 # fullnameOverride: ""
 
 image:
-  repository: "vkneu7/test-repo"
+  repository: "vkneu7/cve-processor"
   pullPolicy: "Always"
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "p1"
+  tag: "delta1"
 container:
   name: cve-processor
 service:
@@ -75,6 +75,8 @@ env:
     value: kafka-controller-1.kafka-controller-headless.kafka.svc.cluster.local:9092
   - name: KAFKA_BROKER_2
     value: kafka-controller-2.kafka-controller-headless.kafka.svc.cluster.local:9092
+  - name: URL
+    value: "https://github.com/CVEProject/cvelistV5/archive/refs/heads/main.zip"
 
 initContainer:
   enabled: true
@@ -101,7 +103,8 @@ initContainer:
 # secrets: 
 #   dbPassword: "placeholder_for_db_password"
 #   dockerConfigJson: "placeholder_for_docker_config_json"
-#   kafkaPassword: "placeholder_for_kafka_password"
+#   kafkaPassword: "placeholder_for_kafka_passwsecrets:
+
 # serviceAccount:
 #   # Specifies whether a service account should be created
 #   create: true
