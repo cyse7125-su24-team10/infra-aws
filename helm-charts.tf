@@ -24,6 +24,11 @@ resource "kubernetes_namespace" "eks-autoscaler" {
     }
 }
 
+resource "kubernetes_namespace" "cve-operator" {
+    metadata {
+        name = "cve-operator"
+    }
+}
 resource "helm_release" "kafka_chart" {
     name      = "kafka"
     chart = "./charts/kafka"

@@ -2,7 +2,7 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-replicaCount: 3
+replicaCount: 1
 
 # image:
 #   repository: nginx
@@ -18,7 +18,7 @@ image:
   repository: "vkneu7/test-repo"
   pullPolicy: "Always"
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "c1"
+  tag: "consumertestlatest6"
 container:
   name: cve-consumer
 service:
@@ -103,7 +103,8 @@ networkPolicy:
     name: postgres-network-policy
     appLabel: cve-db
     port: 5432
-    fromAppLabel: cve-consumer  
+    fromAppLabel: cve-consumer
+     
 # serviceAccount:
 #   # Specifies whether a service account should be created
 #   create: true
