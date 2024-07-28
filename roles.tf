@@ -111,6 +111,11 @@ resource "aws_iam_policy" "inline_policy_ebs" {
   })
 }
 
+resource "aws_iam_role_policy_attachment" "cloud_watch_policy" {
+  role      = aws_iam_role.eks_node_group.name
+  policy_arn = "arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy"
+}
+
 # Iam role for cluster autoscaler 
 resource "aws_iam_role" "cluster_autoscaler" {
   name = "cluster-autoscaler"
