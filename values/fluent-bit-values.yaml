@@ -1,0 +1,6 @@
+clusterName: csye7125
+regionName: us-east-1
+fluentBitHttpPort: "2020"
+fluentBitHttpServer: "On"
+fluentBitReadFromHead: "Off"
+fluentBitReadFromTail: "On"
