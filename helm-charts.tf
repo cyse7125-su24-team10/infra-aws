@@ -29,6 +29,13 @@ resource "kubernetes_namespace" "cve-operator" {
         name = "cve-operator"
     }
 }
+
+resource "kubernetes_namespace" "cloudwatch" {
+    metadata {
+        name = "amazon-cloudwatch"
+    }
+  
+}
 resource "helm_release" "kafka_chart" {
     name      = "kafka"
     chart = "./charts/kafka"
@@ -82,20 +89,14 @@ resource "helm_release" "cluster_autoscaler" {
 
 }
 
-# resource "helm_release" "cve_consumer_chart" {
-#     name      = "cve-consumer"
-#     chart = "../charts/cve-consumer"
-#     wait = false
-#     namespace = "cve-consumer"
-# }
 
-# resource "helm_release" "cve_processor_chart" {
-#     name      = "cve-processor"
-#     chart = "./charts/cve-processor"
-#     wait = false
-#     namespace = "cve-processor"
-#     values = [
-#         "${file("./values/processor-values.yaml")}"
-#     ]
-#     depends_on = [ module.eks, kubernetes_namespace.cve-processor]
-# }
+
+// helm chart for fluent-bit that collects logs from the cluster and sends them to cloudwatch
+
+resource "helm_release" "fluent-bit" {
+    name      = "fluent-bit"
+    chart = "./charts/fluent-bit"
+    namespace = kubernetes_namespace.cloudwatch.metadata[0].name
+    wait = false
+  
+}
