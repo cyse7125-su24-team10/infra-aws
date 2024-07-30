@@ -617,7 +617,7 @@ controller:
   ## @param controller.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if controller.resources is set (controller.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "large"
+  resourcesPreset: "medium"
   ## @param controller.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -1899,7 +1899,7 @@ metrics:
   jmx:
     ## @param metrics.jmx.enabled Whether or not to expose JMX metrics to Prometheus
     ##
-    enabled: false
+    enabled: true
     ## @param metrics.jmx.kafkaJmxPort JMX port where the exporter will collect metrics, exposed in the Kafka container.
     ##
     kafkaJmxPort: 5555
@@ -2095,13 +2095,13 @@ metrics:
 provisioning:
   ## @param provisioning.enabled Enable kafka provisioning Job
   ##
-  enabled: false
+  enabled: true
   ## @param provisioning.automountServiceAccountToken Mount Service Account token in pod
   ##
   automountServiceAccountToken: false
   ## @param provisioning.numPartitions Default number of partitions for topics when unspecified
   ##
-  numPartitions: 3
+  numPartitions: 1
   ## @param provisioning.replicationFactor Default replication factor for topics when unspecified
   ##
   replicationFactor: 1
@@ -2117,7 +2117,7 @@ provisioning:
   topics:
     - name: cve
       partitions: 3
-      replicationFactor: 1
+      replicationFactor: 3
       ## https://kafka.apache.org/documentation/#topicconfigs
       config:
         max.message.bytes: 64000
