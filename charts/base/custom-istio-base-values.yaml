@@ -1,0 +1,5 @@
+global:
+  logAsJson: true
+  revision: "my-revision"
+
+  

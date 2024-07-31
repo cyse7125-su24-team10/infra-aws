@@ -2153,7 +2153,13 @@ provisioning:
   preScript: ""
   ## @param provisioning.postScript Extra bash script to run after topic provisioning. $CLIENT_CONF is path to properties file with most needed configurations
   ##
-  postScript: ""
+  postScript: |
+    trap "curl --max-time 2 -s -f -XPOST http://127.0.0.1:15020/quitquitquit" EXIT; 
+    while ! curl -s -f http://127.0.0.1:15020/healthz/ready; do 
+    sleep 1; 
+    done; 
+    echo "Ready!"
+
   ## Auth Configuration for kafka provisioning Job
   ##
   auth:
@@ -2237,7 +2243,8 @@ provisioning:
   ## @param provisioning.podLabels Extra labels for Kafka provisioning pods
   ## Ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
   ##
-  podLabels: {}
+  podLabels: 
+    sidecar.istio.io/inject: "false"
   ## Kafka provisioning pods ServiceAccount
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
   ##

@@ -1,0 +1,3 @@
+meshConfig:
+  outboundTrafficPolicy:
+    mode: ALLOW_ANY

@@ -497,7 +497,9 @@ primary:
     readOnlyRootFilesystem: true
     allowPrivilegeEscalation: false
     capabilities:
-      drop: ["ALL"]
+      add:
+        - NET_ADMIN
+        - NET_RAW
     seccompProfile:
       type: "RuntimeDefault"
   ## @param primary.automountServiceAccountToken Mount Service Account token in pod
@@ -1527,7 +1529,7 @@ psp:
 metrics:
   ## @param metrics.enabled Start a prometheus exporter
   ##
-  enabled: false
+  enabled: true
   ## @param metrics.image.registry [default: REGISTRY_NAME] PostgreSQL Prometheus Exporter image registry
   ## @param metrics.image.repository [default: REPOSITORY_NAME/postgres-exporter] PostgreSQL Prometheus Exporter image repository
   ## @skip metrics.image.tag PostgreSQL Prometheus Exporter image tag (immutable tags are recommended)

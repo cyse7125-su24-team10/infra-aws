@@ -48,10 +48,6 @@ module "eks" {
     eks-pod-identity-agent = {
       most_recent = true
     }
-
-    # amazon-cloudwatch-observability = {
-    #   most_recent = true
-    # }
   }
 
   # EKS Managed Node Group(s)
@@ -86,7 +82,7 @@ module "eks" {
       create_iam_role = false
       iam_role_arn    = aws_iam_role.eks_node_group.arn
 
-      # Figure out how to add maximum unavailable nodes 
+      vpc_security_group_ids = [aws_security_group.eks_node_group_allow_istio_sg.id]
     }
   }
 
