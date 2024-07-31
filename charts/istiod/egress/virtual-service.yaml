@@ -1,0 +1,55 @@
+# apiVersion: networking.istio.io/v1alpha3
+# kind: VirtualService
+# metadata:
+#   name: direct-github-through-egress
+#   namespace: cve-processor
+# spec:
+#   hosts:
+#   - github.com
+#   gateways:
+#   - istio-egressgateway
+#   - mesh
+#   tls:
+#   - match:
+#     - port: 443
+#       sniHosts:
+#       - github.com
+#     route:
+#     - destination:
+#         host: github.com
+#         port:
+#           number: 443
+#         subset: egress
+
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: direct-github-through-egress
+  namespace: cve-processor
+spec:
+  hosts:
+  - github.com
+  gateways:
+  - istio-egressgateway
+  - mesh
+  tls:
+  - match:
+    - port: 443
+      sniHosts:
+      - github.com
+    route:
+    - destination:
+        host: istio-egressgateway.istio-system.svc.cluster.local
+        port:
+          number: 443
+  - match:
+    - gateways:
+      - mesh
+      port: 443
+      sniHosts:
+      - github.com
+    route:
+    - destination:
+        host: istio-egressgateway.istio-system.svc.cluster.local
+        port:
+          number: 443

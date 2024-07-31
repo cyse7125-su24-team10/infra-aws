@@ -1,32 +1,82 @@
 
+resource "kubernetes_namespace" "istio_system" {
+  metadata {
+    name = "istio-system"
+  }
+}
 
+resource "helm_release" "istio_base" {
+  name       = "istio-base"
+#   repository = "https://istio-release.storage.googleapis.com/charts"
+  chart = "./charts/base"
+  namespace  = kubernetes_namespace.istio_system.metadata[0].name
+  depends_on = [kubernetes_namespace.istio_system]
+}
+
+resource "helm_release" "istiod" {
+  name       = "istiod"
+#   repository = "https://istio-release.storage.googleapis.com/charts"
+  chart      = "./charts/istiod"
+  namespace  = kubernetes_namespace.istio_system.metadata[0].name
+  depends_on = [helm_release.istio_base]
+
+  set {
+    name  = "global.proxy.holdApplicationUntilProxyStarts"
+    value = "true"
+  }
+
+  set {
+    name  = "global.logAsJson"
+    value = "true"
+  }
+}
 resource "kubernetes_namespace" "cve-processor" {
     metadata {
         name = "cve-processor"
+        labels = {
+            "istio-injection" = "enabled"
+            "pod-security.kubernetes.io/enforce" = "privileged"
+        }
     }
 }
 
 resource "kubernetes_namespace" "kafka" {
     metadata {
         name = "kafka"
+        labels = {
+            "istio-injection" = "enabled"
+            "pod-security.kubernetes.io/enforce" = "privileged"
+        }
     }
 }
 
 resource "kubernetes_namespace" "cve-consumer" {
     metadata {
         name = "cve-consumer"
+        labels = {
+            "istio-injection" = "enabled"
+            "pod-security.kubernetes.io/enforce" = "privileged"
+        }
     }
 }
 
 resource "kubernetes_namespace" "eks-autoscaler" {
     metadata {
         name = "eks-autoscaler"
+        labels = {
+            "istio-injection" = "enabled"
+            "pod-security.kubernetes.io/enforce" = "privileged"
+        }
     }
 }
 
 resource "kubernetes_namespace" "cve-operator" {
     metadata {
         name = "cve-operator"
+        labels = {
+            "istio-injection" = "enabled"
+            "pod-security.kubernetes.io/enforce" = "privileged"
+        }
     }
 }
 
@@ -46,7 +96,7 @@ resource "helm_release" "kafka_chart" {
     name      = "kafka"
     chart = "./charts/kafka"
     wait = false
-    namespace = "kafka"
+    namespace = "kafka" 
     values = [
         "${file("./values/kafka-values.yaml")}"
     ]
@@ -61,6 +111,12 @@ resource "helm_release" "postgres_chart" {
     values = [
         "${file("./values/postgres-values.yaml")}"
     ]
+
+    set {
+        name  = "podAnnotations.sidecar\\.istio\\.io/inject"
+        value = "false"
+    }
+
     depends_on = [ module.eks, kubernetes_namespace.cve-consumer ]
 }
 
@@ -68,7 +124,7 @@ resource "helm_release" "cluster_autoscaler" {
     name = "cluster-autoscaler"
     chart = "https://x-access-token:${var.github_token}@github.com/cyse7125-su24-team10/helm-eks-autoscaler/archive/refs/tags/v${var.autoscaler_version}.tar.gz"
     namespace = "eks-autoscaler"
-    wait = false 
+    wait = true
     values = [
         "${file("./values/autoscaler-values.yaml")}"
     ]
@@ -110,26 +166,28 @@ resource "helm_release" "fluent-bit" {
 }
 
 
-// helm chart for prometheus and grafana stack
-resource "helm_release" "prometheus_grafana_stack" {
-    name = "prometheus"
-    repository = "https://prometheus-community.github.io/helm-charts"
-    chart = "kube-prometheus-stack"
-    namespace = kubernetes_namespace.monitoring.metadata[0].name
-    wait = false
-    values = [ 
-        "${file("./values/prometheus-grafana-values.yaml")}"
-    ]
-}
+# // helm chart for prometheus and grafana stack
+# resource "helm_release" "prometheus_grafana_stack" {
+#     name = "prometheus"
+#     repository = "https://prometheus-community.github.io/helm-charts"
+#     chart = "kube-prometheus-stack"
+#     namespace = kubernetes_namespace.monitoring.metadata[0].name
+#     wait = false
+#     values = [ 
+#         "${file("./values/prometheus-grafana-values.yaml")}"
+#     ]
+# }
 
-// kafka exporter
-resource "helm_release" "prometheus_kafka_stack" {
-    name = "kafka-exporter"
-    repository = "https://prometheus-community.github.io/helm-charts"
-    chart = "prometheus-kafka-exporter"
-    namespace = kubernetes_namespace.monitoring.metadata[0].name
-    wait = false
-    values = [ 
-        "${file("./values/prometheus-kafka-values.yaml")}"
-    ] 
-}
+# // kafka exporter
+# resource "helm_release" "prometheus_kafka_stack" {
+#     name = "kafka-exporter"
+#     repository = "https://prometheus-community.github.io/helm-charts"
+#     chart = "prometheus-kafka-exporter"
+#     namespace = kubernetes_namespace.monitoring.metadata[0].name
+#     wait = false
+#     values = [ 
+#         "${file("./values/prometheus-kafka-values.yaml")}"
+#     ]
+
+#     depends_on = [helm_release.kafka_chart, helm_release.prometheus_grafana_stack] 
+# }

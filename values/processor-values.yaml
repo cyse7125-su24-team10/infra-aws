@@ -18,7 +18,7 @@ image:
   repository: "vkneu7/cve-processor"
   pullPolicy: "Always"
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "delta1"
+  tag: "v0.7.4"
 container:
   name: cve-processor
 service:
@@ -76,7 +76,7 @@ env:
   - name: KAFKA_BROKER_2
     value: kafka-controller-2.kafka-controller-headless.kafka.svc.cluster.local:9092
   - name: URL
-    value: "https://github.com/CVEProject/cvelistV5/archive/refs/heads/main.zip"
+    value: "https://github.com/CVEProject/cvelistV5/releases/download/cve_2024-07-29_0900Z/2024-07-29_delta_CVEs_at_0900Z.zip"
 
 initContainer:
   enabled: true
@@ -100,6 +100,11 @@ initContainer:
     - name: DB_SCHEMA
       value: cve
 
+secrets:
+  dbPassword: dmluMTIz
+  dockerConfigJson: eyJhdXRocyI6IHsiaHR0cHM6Ly9pbmRleC5kb2NrZXIuaW8vdjEvIjogeyJ1c2VybmFtZSI6ICJ2a25ldTciLCAicGFzc3dvcmQiOiAiZGNrcl9wYXRfdkRjVk1JYzY4WkJhVEc0UGQxUUtEdWIwdXJVIiwgImVtYWlsIjogInZpbmF5MjEwMzE5OThAZ21haWwuY29tIiwgImF1dGgiOiAiZG10dVpYVTNPbVJqYTNKZmNHRjBYM1pFWTFaTlNXTTJPRnBDWVZSSE5GQmtNVkZMUkhWaU1IVnlWUT09In19fQ==
+  kafkaPassword: bFNlb0hMNVU2TQ== 
+  
 # secrets: 
 #   dbPassword: "placeholder_for_db_password"
 #   dockerConfigJson: "placeholder_for_docker_config_json"

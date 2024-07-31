@@ -139,7 +139,11 @@ clusterAPIMode: incluster-incluster  # incluster-incluster, incluster-kubeconfig
 clusterAPIWorkloadKubeconfigPath: /etc/kubernetes/value
 
 # containerSecurityContext -- [Security context for container](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/)
-containerSecurityContext: {}
+containerSecurityContext:
+  capabilities:
+    add: 
+    - NET_ADMIN
+    - NET_RAW
   # capabilities:
   #   drop:
   #   - ALL
