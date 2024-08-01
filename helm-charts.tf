@@ -30,6 +30,13 @@ resource "helm_release" "istiod" {
     value = "true"
   }
 }
+
+resource "helm_release" "istio_ingress" {
+    name       = "istio-ingress"
+    chart = "./charts/gateway"
+    namespace = kubernetes_namespace.istio_system.metadata[0].name
+    depends_on = [helm_release.istiod,helm_release.istiod]
+}
 resource "kubernetes_namespace" "cve-processor" {
     metadata {
         name = "cve-processor"
@@ -166,28 +173,28 @@ resource "helm_release" "fluent-bit" {
 }
 
 
-# // helm chart for prometheus and grafana stack
-# resource "helm_release" "prometheus_grafana_stack" {
-#     name = "prometheus"
-#     repository = "https://prometheus-community.github.io/helm-charts"
-#     chart = "kube-prometheus-stack"
-#     namespace = kubernetes_namespace.monitoring.metadata[0].name
-#     wait = false
-#     values = [ 
-#         "${file("./values/prometheus-grafana-values.yaml")}"
-#     ]
-# }
+// helm chart for prometheus and grafana stack
+resource "helm_release" "prometheus_grafana_stack" {
+    name = "prometheus"
+    repository = "https://prometheus-community.github.io/helm-charts"
+    chart = "kube-prometheus-stack"
+    namespace = kubernetes_namespace.monitoring.metadata[0].name
+    wait = false
+    values = [ 
+        "${file("./values/prometheus-grafana-values.yaml")}"
+    ]
+}
 
-# // kafka exporter
-# resource "helm_release" "prometheus_kafka_stack" {
-#     name = "kafka-exporter"
-#     repository = "https://prometheus-community.github.io/helm-charts"
-#     chart = "prometheus-kafka-exporter"
-#     namespace = kubernetes_namespace.monitoring.metadata[0].name
-#     wait = false
-#     values = [ 
-#         "${file("./values/prometheus-kafka-values.yaml")}"
-#     ]
+// kafka exporter
+resource "helm_release" "prometheus_kafka_stack" {
+    name = "kafka-exporter"
+    repository = "https://prometheus-community.github.io/helm-charts"
+    chart = "prometheus-kafka-exporter"
+    namespace = kubernetes_namespace.monitoring.metadata[0].name
+    wait = false
+    values = [ 
+        "${file("./values/prometheus-kafka-values.yaml")}"
+    ]
 
-#     depends_on = [helm_release.kafka_chart, helm_release.prometheus_grafana_stack] 
-# }
+    depends_on = [helm_release.kafka_chart, helm_release.prometheus_grafana_stack] 
+}
