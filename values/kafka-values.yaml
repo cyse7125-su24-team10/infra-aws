@@ -2243,8 +2243,7 @@ provisioning:
   ## @param provisioning.podLabels Extra labels for Kafka provisioning pods
   ## Ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
   ##
-  podLabels: 
-    sidecar.istio.io/inject: "false"
+  podLabels: {}
   ## Kafka provisioning pods ServiceAccount
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
   ##
