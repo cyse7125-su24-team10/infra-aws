@@ -32,19 +32,31 @@ resource "helm_release" "istiod" {
 }
 
 resource "helm_release" "istio_ingress" {
-    name       = "istio-ingress"
-    chart = "./charts/gateway"
-    namespace = kubernetes_namespace.istio_system.metadata[0].name
-    depends_on = [helm_release.istiod,helm_release.istiod]
-}
-resource "kubernetes_namespace" "cve-processor" {
-    metadata {
-        name = "cve-processor"
-        labels = {
-            "istio-injection" = "enabled"
-            "pod-security.kubernetes.io/enforce" = "privileged"
-        }
-    }
+  name       = "istio-ingress"
+  chart      = "./charts/gateway"
+  namespace  = kubernetes_namespace.istio_system.metadata[0].name
+  depends_on = [helm_release.istiod]
+
+  values = [
+    <<-EOT
+    service:
+      annotations:
+        service.beta.kubernetes.io/aws-load-balancer-type: "nlb"
+        service.beta.kubernetes.io/aws-load-balancer-scheme: "internet-facing"
+        external-dns.alpha.kubernetes.io/hostname: "grafana.prod.skynetx.me"
+      ports:
+        - port: 80
+          targetPort: 8080
+          name: http2
+        - port: 443
+          targetPort: 8443
+          name: https
+        - port: 15021
+          targetPort: 15021
+          name: status-port
+      type: LoadBalancer
+    EOT
+  ]
 }
 
 resource "kubernetes_namespace" "kafka" {
@@ -107,7 +119,7 @@ resource "helm_release" "kafka_chart" {
     values = [
         "${file("./values/kafka-values.yaml")}"
     ]
-    depends_on = [ module.eks, kubernetes_namespace.kafka ]
+    depends_on = [ module.eks, kubernetes_namespace.kafka, helm_release.prometheus_kafka_stack ]
 }
 
 resource "helm_release" "postgres_chart" {
@@ -195,6 +207,4 @@ resource "helm_release" "prometheus_kafka_stack" {
     values = [ 
         "${file("./values/prometheus-kafka-values.yaml")}"
     ]
-
-    depends_on = [helm_release.kafka_chart, helm_release.prometheus_grafana_stack] 
 }
