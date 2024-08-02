@@ -1,0 +1,23 @@
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: letsencrypt-staging
+  annotations:
+    meta.helm.sh/release-name: istio-ingress
+    meta.helm.sh/release-namespace: istio-system
+  labels:
+    app.kubernetes.io/managed-by: Helm
+spec:
+  acme:
+    server: https://acme-staging-v02.api.letsencrypt.org/directory
+    email: admin@skynetx.me
+    privateKeySecretRef:
+      name: letsencrypt-staging-key
+    solvers:
+    - dns01:
+        route53:
+          region: us-east-1
+          hostedZoneID: "Z00010065WQMRMU423TJ"
+      selector: 
+        dnsZones:
+          - "dev.skynetx.me"

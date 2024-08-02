@@ -5,9 +5,14 @@ resource "kubernetes_namespace" "istio_system" {
   }
 }
 
+resource "kubernetes_namespace" "cert_manager" {
+  metadata {
+    name = "cert-manager"
+  }
+}
+
 resource "helm_release" "istio_base" {
   name       = "istio-base"
-#   repository = "https://istio-release.storage.googleapis.com/charts"
   chart = "./charts/base"
   namespace  = kubernetes_namespace.istio_system.metadata[0].name
   depends_on = [kubernetes_namespace.istio_system]
@@ -15,10 +20,9 @@ resource "helm_release" "istio_base" {
 
 resource "helm_release" "istiod" {
   name       = "istiod"
-#   repository = "https://istio-release.storage.googleapis.com/charts"
   chart      = "./charts/istiod"
   namespace  = kubernetes_namespace.istio_system.metadata[0].name
-  depends_on = [helm_release.istio_base]
+  depends_on = [helm_release.istio_base, kubernetes_namespace.istio_system]
 
   set {
     name  = "global.proxy.holdApplicationUntilProxyStarts"
@@ -43,7 +47,7 @@ resource "helm_release" "istio_ingress" {
       annotations:
         service.beta.kubernetes.io/aws-load-balancer-type: "nlb"
         service.beta.kubernetes.io/aws-load-balancer-scheme: "internet-facing"
-        external-dns.alpha.kubernetes.io/hostname: "grafana.prod.skynetx.me"
+        external-dns.alpha.kubernetes.io/hostname: "grafana.dev.skynetx.me"
       ports:
         - port: 80
           targetPort: 8080
@@ -57,6 +61,28 @@ resource "helm_release" "istio_ingress" {
       type: LoadBalancer
     EOT
   ]
+}
+
+# resource "helm_release" "cert_manager" {
+#     name      = "cert-manager"
+#     chart     = "./charts/cert-manager"
+#     namespace = kubernetes_namespace.cert_manager.metadata[0].name
+#     depends_on = [helm_release.istio_ingress]
+
+#     set {
+#       name  = "installCRDs"
+#       value = "true"
+#     }
+# }
+
+resource "kubernetes_namespace" "cve-processor" {
+    metadata {
+        name = "cve-processor"
+        labels = {
+            "istio-injection" = "enabled"
+            "pod-security.kubernetes.io/enforce" = "privileged"
+        }
+    }
 }
 
 resource "kubernetes_namespace" "kafka" {
@@ -119,7 +145,7 @@ resource "helm_release" "kafka_chart" {
     values = [
         "${file("./values/kafka-values.yaml")}"
     ]
-    depends_on = [ module.eks, kubernetes_namespace.kafka, helm_release.prometheus_kafka_stack ]
+    depends_on = [ module.eks, kubernetes_namespace.kafka, helm_release.prometheus_grafana_stack, helm_release.prometheus_kafka_stack ]
 }
 
 resource "helm_release" "postgres_chart" {
@@ -207,4 +233,6 @@ resource "helm_release" "prometheus_kafka_stack" {
     values = [ 
         "${file("./values/prometheus-kafka-values.yaml")}"
     ]
+
+    depends_on = [helm_release.prometheus_grafana_stack] 
 }
