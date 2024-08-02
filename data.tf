@@ -14,3 +14,8 @@ data "aws_eip" "nat_eks_eip" {
 data "tls_certificate" "eks" {
   url = module.eks.cluster_oidc_issuer_url
 }
+
+
+data "aws_route53_zone" "primary" {
+  name = "dev.skynetx.me"
+}

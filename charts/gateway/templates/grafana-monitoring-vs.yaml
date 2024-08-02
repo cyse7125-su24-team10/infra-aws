@@ -5,15 +5,28 @@ metadata:
   namespace: istio-system
 spec:
   hosts:
-  - "*"
+    - grafana.dev.skynetx.me
   gateways:
-  - grafana-gateway
+    - grafana-gateway
   http:
-  - match:
-    - uri:
-        prefix: /
-    route:
-    - destination:
-        host: prometheus-grafana.monitoring.svc.cluster.local
-        port:
-          number: 80
+    - match:
+      - port: 80
+      redirect:
+        uri: https://grafana.dev.skynetx.me
+        port: 443
+    - route:
+        - destination:
+            host: prometheus-grafana.monitoring.svc.cluster.local
+            port:
+              number: 80
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: grafana
+  namespace: monitoring
+spec: 
+  host: prometheus-grafana.monitoring.svc.cluster.local
+  trafficPolicy:
+    tls:
+      mode: DISABLE

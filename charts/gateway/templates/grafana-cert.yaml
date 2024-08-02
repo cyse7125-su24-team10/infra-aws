@@ -1,0 +1,25 @@
+# apiVersion: cert-manager.io/v1
+# kind: Certificate
+# metadata:
+#   name: grafana-cert
+#   namespace: istio-system
+# spec:
+#   secretName: grafana-ingress-cert
+#   dnsNames:
+#   - "grafana.dev.skynetx.me"
+#   issuerRef:
+#     name: letsencrypt-staging
+#     kind: ClusterIssuer
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: grafana-cert
+  namespace: istio-system
+spec:
+  secretName: grafana-cert-tls
+  commonName: grafana.dev.skynetx.me
+  dnsNames:
+    - "grafana.dev.skynetx.me"
+  issuerRef:
+    name: letsencrypt-staging
+    kind: ClusterIssuer

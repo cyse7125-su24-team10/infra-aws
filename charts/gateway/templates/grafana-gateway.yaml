@@ -3,9 +3,11 @@ kind: Gateway
 metadata:
   name: grafana-gateway
   namespace: istio-system
+  annotations: 
+    external-dns.alpha.kubernetes.io/hostname: grafana.dev.skynetx.me
 spec:
   selector:
-    app: istio-ingress  # Changed from istio: ingressgateway
+    app: istio-ingress
   servers:
   - port:
       number: 80
@@ -13,3 +15,13 @@ spec:
       protocol: HTTP
     hosts:
     - "*"
+  - port:
+      number: 443
+      name: https
+      protocol: HTTPS
+    hosts:
+    - "grafana.dev.skynetx.me"
+    tls:
+      mode: SIMPLE
+      credentialName: grafana-cert-tls
+

@@ -179,3 +179,43 @@ resource "aws_iam_role_policy" "cluster_autoscaler" {
 
   depends_on = [ aws_iam_role.cluster_autoscaler, module.eks ]
 }
+
+
+resource "aws_iam_policy" "cert_manager_route53_policy" {
+  name        = "cert-manager-route53-policy"
+  description = "Policy for Cert Manager to perform DNS challenges using Route 53"
+  policy      = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "route53:GetChange",
+          "route53:ChangeResourceRecordSets"
+        ]
+        Resource = "arn:aws:route53:::hostedzone/${data.aws_route53_zone.primary.id}"
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "route53:ListHostedZones",
+          "route53:ListResourceRecordSets",
+          "route53:ListHostedZonesByName"
+        ]
+        Resource = "*"
+      }
+    ]
+  })
+}
+
+
+resource "aws_iam_policy_attachment" "cert_manager_policy" {
+  name       = "cert-manager-policy-kms-attachment"
+  roles      = [aws_iam_role.eks_node_group.name]
+  policy_arn = aws_iam_policy.cert_manager_route53_policy.arn
+}
+
+resource "aws_iam_role_policy_attachment" "eks_node_group_route53_full_access" {
+  role       = aws_iam_role.eks_node_group.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonRoute53FullAccess"
+}
