@@ -40,27 +40,7 @@ resource "helm_release" "istio_ingress" {
   chart      = "./charts/gateway"
   namespace  = kubernetes_namespace.istio_system.metadata[0].name
   depends_on = [helm_release.istiod]
-
-  values = [
-    <<-EOT
-    service:
-      annotations:
-        service.beta.kubernetes.io/aws-load-balancer-type: "nlb"
-        service.beta.kubernetes.io/aws-load-balancer-scheme: "internet-facing"
-        external-dns.alpha.kubernetes.io/hostname: "grafana.dev.skynetx.me"
-      ports:
-        - port: 80
-          targetPort: 8080
-          name: http2
-        - port: 443
-          targetPort: 8443
-          name: https
-        - port: 15021
-          targetPort: 15021
-          name: status-port
-      type: LoadBalancer
-    EOT
-  ]
+  values = [var.istio_ingress_values]
 }
 
 # resource "helm_release" "cert_manager" {

@@ -70,3 +70,19 @@ variable "github_token" {
 variable "autoscaler_version" {
   
 }
+  #EKS Blueprint addon 
+variable "cert_manager_route53_hosted_zone_arns" {
+  description = "ARNs for the Route53 hosted zones used by cert manager"
+  type        = list(string)
+}
+
+variable "istio_ingress_values" {
+  description = "Values for the Istio Ingress Helm release"
+  type        = string
+}
+
+variable "route53_hosted_zone" {
+    description = "Route53 hosted zone"
+    type        = string
+}
+
