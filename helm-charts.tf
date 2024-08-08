@@ -137,6 +137,13 @@ resource "kubernetes_namespace" "monitoring" {
     }
   
 }
+
+resource "kubernetes_namespace" "metrics_server" {
+    metadata {
+        name = "metrics-server"
+    }
+  
+}
 resource "helm_release" "kafka_chart" {
     name      = "kafka"
     chart = "./charts/kafka"
@@ -235,4 +242,18 @@ resource "helm_release" "prometheus_kafka_stack" {
     ]
 
     depends_on = [helm_release.prometheus_grafana_stack] 
+}
+
+resource "helm_release" "metrics_server" {
+    name = "metrics-server"
+    repository = "https://kubernetes-sigs.github.io/metrics-server/"
+    chart = "metrics-server"
+    namespace = "kube-system"
+    version = "3.12.1"
+    wait = false
+    # set {
+    # name  = "extraArgs"
+    # value = "{--kubelet-preferred-address-types=InternalIP\\,ExternalIP\\,Hostname,--kubelet-use-node-status-port,--metric-resolution=15s}"
+    # }
+    depends_on = [ helm_release.cluster_autoscaler ]
 }
