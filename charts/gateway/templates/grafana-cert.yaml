@@ -23,3 +23,17 @@ spec:
   issuerRef:
     name: letsencrypt-staging
     kind: ClusterIssuer
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: streamlit-cert
+  namespace: istio-system
+spec:
+  secretName: streamlit-cert-tls
+  commonName: cve.dev.skynetx.me
+  dnsNames:
+    - "cve.dev.skynetx.me"
+  issuerRef:
+    name: letsencrypt-staging
+    kind: ClusterIssuer
