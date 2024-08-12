@@ -30,3 +30,25 @@ spec:
   trafficPolicy:
     tls:
       mode: DISABLE
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: streamlit-vs
+  namespace: istio-system
+spec:
+  hosts:
+    - cve.dev.skynetx.me
+  gateways:
+    - grafana-gateway
+  http:
+    - match:
+      - port: 80
+      redirect:
+        uri: https://cve.dev.skynetx.me
+        port: 443
+    - route:
+        - destination:
+            host: llm-cve.llm-cve.svc.cluster.local
+            port:
+              number: 8501

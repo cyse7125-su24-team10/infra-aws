@@ -105,6 +105,16 @@ resource "kubernetes_namespace" "cve-operator" {
     }
 }
 
+resource "kubernetes_namespace" "llm-cve" {
+    metadata {
+        name = "llm-cve"
+        labels = {
+            "istio-injection" = "enabled"
+            "pod-security.kubernetes.io/enforce" = "privileged"
+        }
+    }
+}
+
 resource "kubernetes_namespace" "cloudwatch" {
     metadata {
         name = "amazon-cloudwatch"

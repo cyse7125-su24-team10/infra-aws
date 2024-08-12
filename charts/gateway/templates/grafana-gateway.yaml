@@ -4,7 +4,7 @@ metadata:
   name: grafana-gateway
   namespace: istio-system
   annotations: 
-    external-dns.alpha.kubernetes.io/hostname: grafana.dev.skynetx.me
+    external-dns.alpha.kubernetes.io/hostname: grafana.dev.skynetx.me,cve.dev.skynetx.me
 spec:
   selector:
     app: istio-ingress
@@ -24,4 +24,12 @@ spec:
     tls:
       mode: SIMPLE
       credentialName: grafana-cert-tls
-
+  - port:
+      number: 443
+      name: https-streamlit
+      protocol: HTTPS
+    hosts:
+    - "cve.dev.skynetx.me"
+    tls:
+      mode: SIMPLE
+      credentialName: streamlit-cert-tls
