@@ -7,7 +7,7 @@ module "eks_blueprints_addons" {
   oidc_provider_arn = module.eks.oidc_provider_arn
   enable_external_dns                    = true
   enable_cert_manager                    = true
-  cert_manager_route53_hosted_zone_arns  = ["arn:aws:route53:::hostedzone/Z00010065WQMRMU423TJ"]
+  cert_manager_route53_hosted_zone_arns  = var.cert_manager_route53_hosted_zone_arns
 
   tags = {
     Environment = "cert-manager"
