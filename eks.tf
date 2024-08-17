@@ -84,6 +84,54 @@ module "eks" {
 
       vpc_security_group_ids = [aws_security_group.eks_node_group_allow_istio_sg.id]
     }
+
+        # New node group for c3.2xlarge instances
+    ollama = {
+      ami_type      = "AL2_x86_64"  # or your preferred AMI type
+      min_size      = 1
+      max_size      = 1
+      desired_size  = 1
+
+      instance_types = ["r6id.2xlarge"]
+      capacity_type  = "ON_DEMAND"  # or "SPOT" if you prefer
+
+      use_custom_launch_template = true
+      create_launch_template     = true
+
+      update_config = {
+        max_unavailable = 1
+      }
+
+      block_device_mappings = [
+        {
+          device_name = "/dev/xvda"
+          ebs = {
+            encrypted   = true
+            volume_size = 100  # adjust as needed
+            kms_key_id  = aws_kms_key.ebs.arn
+            volume_type = "gp3"
+          }
+        }
+      ]
+
+      create_iam_role = false
+      iam_role_arn    = aws_iam_role.eks_node_group.arn
+
+      vpc_security_group_ids = [aws_security_group.eks_node_group_allow_istio_sg.id]
+
+      # Apply taint to the node group
+      taints = [
+        {
+          key    = "dedicated"
+          value  = "ollama"
+          effect = "NO_SCHEDULE"
+        }
+      ]
+
+      labels = {
+        instance-type = "r6id.2xlarge"
+      }
+    }
   }
 
 
