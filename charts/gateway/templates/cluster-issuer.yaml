@@ -9,7 +9,6 @@ metadata:
     app.kubernetes.io/managed-by: Helm
 spec:
   acme:
-    # server: https://acme-staging-v02.api.letsencrypt.org/directory
     server: https://acme-v02.api.letsencrypt.org/directory
     email: admin@skynetx.me
     privateKeySecretRef:
@@ -18,7 +17,7 @@ spec:
     - dns01:
         route53:
           region: us-east-1
-          hostedZoneID: "Z00010065WQMRMU423TJ"
+          hostedZoneID: "Z000400938645OOW6JWE8"
       selector: 
         dnsZones:
-          - "dev.skynetx.me" 
+          - "prod.skynetx.me"

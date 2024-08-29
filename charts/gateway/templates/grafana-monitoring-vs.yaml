@@ -5,14 +5,14 @@ metadata:
   namespace: istio-system
 spec:
   hosts:
-    - grafana.dev.skynetx.me
+    - grafana.prod.skynetx.me
   gateways:
     - grafana-gateway
   http:
     - match:
       - port: 80
       redirect:
-        uri: https://grafana.dev.skynetx.me
+        uri: https://grafana.prod.skynetx.me
         port: 443
     - route:
         - destination:
@@ -38,14 +38,14 @@ metadata:
   namespace: istio-system
 spec:
   hosts:
-    - cve.dev.skynetx.me
+    - cve.prod.skynetx.me
   gateways:
     - grafana-gateway
   http:
     - match:
       - port: 80
       redirect:
-        uri: https://cve.dev.skynetx.me
+        uri: https://cve.prod.skynetx.me
         port: 443
     - route:
         - destination:
