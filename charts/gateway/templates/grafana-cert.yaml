@@ -17,9 +17,9 @@ metadata:
   namespace: istio-system
 spec:
   secretName: grafana-cert-tls
-  commonName: grafana.dev.skynetx.me
+  commonName: grafana.prod.skynetx.me
   dnsNames:
-    - "grafana.dev.skynetx.me"
+    - "grafana.prod.skynetx.me"
   issuerRef:
     name: letsencrypt-staging
     kind: ClusterIssuer
@@ -31,9 +31,9 @@ metadata:
   namespace: istio-system
 spec:
   secretName: streamlit-cert-tls
-  commonName: cve.dev.skynetx.me
+  commonName: cve.prod.skynetx.me
   dnsNames:
-    - "cve.dev.skynetx.me"
+    - "cve.prod.skynetx.me"
   issuerRef:
     name: letsencrypt-staging
     kind: ClusterIssuer
