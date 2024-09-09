@@ -1,8 +1,19 @@
 # infra-AWS
 
+![Kubernetes](https://img.shields.io/badge/Kubernetes-326CE5.svg?style=for-the-badge&logo=Kubernetes&logoColor=white)
 [![Terraform](https://img.shields.io/badge/Terraform-844FBA.svg?style=for-the-badge&logo=Terraform&logoColor=white)](https://www.terraform.io/)
 [![Amazon Web Services](https://img.shields.io/badge/Amazon%20Web%20Services-232F3E.svg?style=for-the-badge&logo=Amazon-Web-Services&logoColor=white)](https://aws.amazon.com/)
+![Amazon Route 53](https://img.shields.io/badge/Amazon%20Route%2053-8C4FFF.svg?style=for-the-badge&logo=Amazon-Route-53&logoColor=white)
+![Amazon CloudWatch](https://img.shields.io/badge/Amazon%20CloudWatch-FF4F8B.svg?style=for-the-badge&logo=Amazon-CloudWatch&logoColor=white)
 [![EKS](https://img.shields.io/badge/EKS-FF9900.svg?style=for-the-badge&logo=Amazon-EKS&logoColor=white)](https://aws.amazon.com/eks/)
+![Helm](https://img.shields.io/badge/Helm-0F1689.svg?style=for-the-badge&logo=Helm&logoColor=white)
+![Grafana](https://img.shields.io/badge/Grafana-F46800.svg?style=for-the-badge&logo=Grafana&logoColor=white)
+![Apache Kafka](https://img.shields.io/badge/Apache%20Kafka-231F20.svg?style=for-the-badge&logo=Apache-Kafka&logoColor=white)
+![Prometheus](https://img.shields.io/badge/Prometheus-E6522C.svg?style=for-the-badge&logo=Prometheus&logoColor=white)
+![Fluent Bit](https://img.shields.io/badge/Fluent%20Bit-49BDA5.svg?style=for-the-badge&logo=Fluent-Bit&logoColor=white)
+![Istio](https://img.shields.io/badge/Istio-466BB0.svg?style=for-the-badge&logo=Istio&logoColor=white)
+
+
 
 ## Introduction
 This repository provides Infrastructure as Code (IaC) using Terraform to provision an AWS EKS cluster with multiple node groups, IAM roles, and other AWS resources like KMS encryption and security groups. This setup includes advanced features like custom launch templates, encryption for EBS volumes, and tainting specific node groups.
@@ -184,13 +195,12 @@ Ensure the following tools are installed and configured before proceeding:
 
 ## Setup Instructions
 
-### 1. Clone the Repository
-Clone the repository to your local machine:
+ 1. **Clone the Repository**
 ```bash
 git clone git@github.com:your-username/infra-aws.git
 cd infra-aws
 ```
-### 2. **Add terraform.tfvars file: Example below**
+ 2. **Add terraform.tfvars file: Example below**
     ```hcl
     provider_region = "us-east-1"
     #vpc
@@ -270,31 +280,31 @@ cd infra-aws
     cert_manager_route53_hosted_zone_arns = ["arn:aws:route53:::hostedzone/your_hosted_zone_id"]
     route53_hosted_zone =  "prod.skynetx.me"
 
-### 3. **Setup aws profile on cli**
+ 3. **Setup aws profile on cli**
     ```bash
     export AWS_PROFILE=dev
     ```
 
-### 4. **Initialize Terraform:**
+ 4. **Initialize Terraform:**
     ```bash
     terraform init
     ```
 
-### 5. **Terraform Configuration:**
+ 5. **Terraform Configuration:**
    Review the `terraform.tfvars`. Modify variables in `terraform.tfvars` as needed for your environment.
 
-### 6. **Plan Infrastructure Changes:**
+ 6. **Plan Infrastructure Changes:**
     ```bash
     terraform plan
     ```
 
-### 7. **Apply Infrastructure Changes:**
+7. **Apply Infrastructure Changes:**
     ```bash
     terraform apply
     ```
 
 ### 8. **Verify the Infrastructure:**
-   After Terraform applies the changes successfully, verify the infrastructure on GCP.
+   After Terraform applies the changes successfully, verify the infrastructure on AWS.
 
 ## Cleaning Up
 Instructions for tearing down the infrastructure
