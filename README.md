@@ -1,4 +1,4 @@
-# infra-AWS
+# infra-aws
 
 ![Kubernetes](https://img.shields.io/badge/Kubernetes-326CE5.svg?style=for-the-badge&logo=Kubernetes&logoColor=white)
 [![Terraform](https://img.shields.io/badge/Terraform-844FBA.svg?style=for-the-badge&logo=Terraform&logoColor=white)](https://www.terraform.io/)
@@ -15,8 +15,31 @@
 
 
 
-## Introduction
-This repository provides Infrastructure as Code (IaC) using Terraform to provision an AWS EKS cluster with multiple node groups, IAM roles, and other AWS resources like KMS encryption and security groups. This setup includes advanced features like custom launch templates, encryption for EBS volumes, and tainting specific node groups.
+## Project Overview
+
+This project sets up a robust infrastructure on AWS using Terraform, Helm, and Kubernetes, primarily focused on deploying and managing services in an EKS (Elastic Kubernetes Service) cluster. It includes various components and configurations to support a production-grade environment.
+
+### Key Components
+
+- **EKS Cluster**: The project provisions an EKS cluster using Terraform, which serves as the foundation for deploying Kubernetes workloads.
+
+- **Namespaces**: Several Kubernetes namespaces are created for organizational purposes, including:
+  - `istio-system`: For Istio service mesh components.
+  - `cert-manager`: For managing TLS certificates.
+  - `cve-processor`, `kafka`, `cve-consumer`, `eks-autoscaler`, `cve-operator`, `llm-cve`: For specific applications and services.
+  - `amazon-cloudwatch`, `monitoring`, `metrics-server`: For monitoring and logging.
+
+- **KMS Keys**:
+  - **EKS Secrets Key**: Manages encryption for EKS secrets with key rotation enabled.
+  - **EBS Key**: Manages encryption for EBS volumes with specific IAM permissions and key rotation.
+
+- **Security Groups**:
+  - **`eks_node_group_allow_istio_sg`**: Allows incoming TCP traffic on port 15017 from any IP address to facilitate communication for Istio components.
+
+### Additional Features
+
+This infrastructure setup provides a comprehensive solution for deploying, managing, and scaling applications in a Kubernetes environment on AWS, integrating with monitoring, logging, and security services.
+
 
 ## Helm Charts Bootstrapped During Terraform Apply
 
@@ -303,7 +326,7 @@ cd infra-aws
     terraform apply
     ```
 
-### 8. **Verify the Infrastructure:**
+ 8. **Verify the Infrastructure:**
    After Terraform applies the changes successfully, verify the infrastructure on AWS.
 
 ## Cleaning Up
