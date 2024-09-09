@@ -105,7 +105,7 @@ secrets:
   dockerConfigJson: "placeholder_for_docker_config_json"
   kafkaPassword: "placeholder_for_kafka_password"
 ```
-2. Flunetbit 
+2. Fluetbit 
 ```bash
 clusterName: csye7125
 regionName: us-east-1
