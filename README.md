@@ -1,5 +1,7 @@
 # infra-aws
 
+Production-Grade Kubernetes Cluster set-up on AWS with Terraform and Helm, including Istio for service mesh, Kafka for messaging, and KMS keys for encryption. Configured for high availability, scalability, and secure management of resources.
+
 ![Kubernetes](https://img.shields.io/badge/Kubernetes-326CE5.svg?style=for-the-badge&logo=Kubernetes&logoColor=white)
 [![Terraform](https://img.shields.io/badge/Terraform-844FBA.svg?style=for-the-badge&logo=Terraform&logoColor=white)](https://www.terraform.io/)
 [![Amazon Web Services](https://img.shields.io/badge/Amazon%20Web%20Services-232F3E.svg?style=for-the-badge&logo=Amazon-Web-Services&logoColor=white)](https://aws.amazon.com/)
