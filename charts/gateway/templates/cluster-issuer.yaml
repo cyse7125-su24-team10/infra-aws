@@ -17,7 +17,7 @@ spec:
     - dns01:
         route53:
           region: us-east-1
-          hostedZoneID: "Z000400938645OOW6JWE8"
+          hostedZoneID: "hosted_zone_id"
       selector: 
         dnsZones:
           - "prod.skynetx.me"
